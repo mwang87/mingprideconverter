@@ -4,9 +4,12 @@ import java.io.File;
 
 import uk.ac.ebi.pride.jmztab.model.MZTabFile;
 import uk.ac.ebi.pride.jmztab.utils.MZTabFileConverter;
+
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.PrideXmlControllerImpl;
 import uk.ac.ebi.pride.utilities.data.exporters.AbstractMzTabConverter;
+import uk.ac.ebi.pride.utilities.data.exporters.MGFConverter;
 import uk.ac.ebi.pride.utilities.data.exporters.PRIDEMzTabConverter;
+
 
 
 /**
@@ -37,7 +40,7 @@ public class App
     public static int writeMGF(String prideXMLFilename, String output_MGF){
     	File inputFile = new File(prideXMLFilename);
     	PrideXmlControllerImpl prideController = new PrideXmlControllerImpl(inputFile);
-    	//MGFConverter converter = new MGFConverter(prideController, prideController);
+    	MGFConverter converter = new MGFConverter(prideController, output_MGF);
     	return 0;
     }
 }
