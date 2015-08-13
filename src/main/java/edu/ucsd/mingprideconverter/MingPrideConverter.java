@@ -35,8 +35,8 @@ public class MingPrideConverter extends MGFConverter
     {
         System.out.println(args[0]);
         String prideXMLFilename = args[0];
-        writeMGF(prideXMLFilename, "output.mgf");
-        writeMzTab(prideXMLFilename, "output.mzTab");
+        writeMGF(prideXMLFilename, args[1]);
+        writeMzTab(prideXMLFilename, args[2]);
     }
     
     public static int writeMzTab(String prideXMLFilename, String output_mzTab) throws IOException{
