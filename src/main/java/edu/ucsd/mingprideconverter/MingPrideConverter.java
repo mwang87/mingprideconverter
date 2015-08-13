@@ -1,10 +1,14 @@
 package edu.ucsd.mingprideconverter;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import uk.ac.ebi.pride.jmztab.model.MZTabFile;
 import uk.ac.ebi.pride.jmztab.utils.MZTabFileConverter;
 
+import uk.ac.ebi.pride.utilities.data.controller.DataAccessController;
 import uk.ac.ebi.pride.utilities.data.controller.impl.ControllerImpl.PrideXmlControllerImpl;
 import uk.ac.ebi.pride.utilities.data.exporters.AbstractMzTabConverter;
 import uk.ac.ebi.pride.utilities.data.exporters.MGFConverter;
@@ -16,31 +20,47 @@ import uk.ac.ebi.pride.utilities.data.exporters.PRIDEMzTabConverter;
  * Hello world!
  *
  */
-public class App 
+public class MingPrideConverter extends MGFConverter
 {
-    public static void main( String[] args )
+
+	public MingPrideConverter(DataAccessController controller, String outputFilePath) {
+		super(controller, outputFilePath);
+	}
+	
+	public void convertToMGF() throws Exception{
+		this.convert();
+	}
+
+	public static void main( String[] args ) throws Exception
     {
         System.out.println(args[0]);
         String prideXMLFilename = args[0];
         writeMGF(prideXMLFilename, "output.mgf");
-        //writeMzTab(prideXMLFilename, "output.mzTab");
+        writeMzTab(prideXMLFilename, "output.mzTab");
     }
     
-    public static int writeMzTab(String prideXMLFilename, String output_mzTab){
+    public static int writeMzTab(String prideXMLFilename, String output_mzTab) throws IOException{
     	File inputFile = new File(prideXMLFilename);
     	PrideXmlControllerImpl prideController = new PrideXmlControllerImpl(inputFile);
     	AbstractMzTabConverter mzTabconverter = new PRIDEMzTabConverter(prideController);
     	MZTabFile mzTabFile = mzTabconverter.getMZTabFile();
-        MZTabFileConverter checker = new MZTabFileConverter();
-        checker.check(mzTabFile);
-        System.out.println(mzTabFile.toString());
+    	
+    	File file = new File(output_mzTab);
+    	// if file doesn't exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+    	FileOutputStream fop = new FileOutputStream(file);
+    	mzTabFile.printMZTab(fop);
+		fop.close();
     	return 0;
     }
     
-    public static int writeMGF(String prideXMLFilename, String output_MGF){
+    public static int writeMGF(String prideXMLFilename, String output_MGF) throws Exception{
     	File inputFile = new File(prideXMLFilename);
     	PrideXmlControllerImpl prideController = new PrideXmlControllerImpl(inputFile);
-    	MGFConverter converter = new MGFConverter(prideController, output_MGF);
+    	MingPrideConverter converter = new MingPrideConverter(prideController, output_MGF);
+    	converter.convertToMGF();
     	return 0;
     }
 }
