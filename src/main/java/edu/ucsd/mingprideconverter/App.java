@@ -20,10 +20,10 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println(args[1]);
-        String prideXMLFilename = args[1];
-        //writeMGF(prideXMLFilename, "output.mgf");
-        writeMzTab(prideXMLFilename, "output.mzTab");
+        System.out.println(args[0]);
+        String prideXMLFilename = args[0];
+        writeMGF(prideXMLFilename, "output.mgf");
+        //writeMzTab(prideXMLFilename, "output.mzTab");
     }
     
     public static int writeMzTab(String prideXMLFilename, String output_mzTab){
